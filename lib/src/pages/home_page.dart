@@ -54,7 +54,8 @@ class _HomePageState extends State<HomePage> {
 
     try {
       // LECTOR QR;
-      futureString = await BarcodeScanner.scan();
+      // futureString = await BarcodeScanner.scan(); /// PARA QUE LEA QR
+         futureString =  futureString;
     } catch (e) {
       futureString = e.toString();
     }

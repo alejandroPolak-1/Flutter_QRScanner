@@ -19,14 +19,24 @@ class MapaPage extends StatelessWidget {
           );
         }
 
-        return ListView.builder( 
-          itemCount:scans.length, //Contar numeros de scan
-          itemBuilder: (context, i) => ListTile(
-            leading: Icon( Icons.cloud_queue, color: Theme.of(context).primaryColor),
-            title: Text( scans[i].valor),
-            trailing: Icon( Icons.keyboard_arrow_right, color: Colors.grey), // Indicar que se puede abrir
-          ) 
-        );
+        return ListView.builder(
+            itemCount: scans.length, //Contar numeros de scan
+            itemBuilder: (context, i) => Dismissible(
+                  //Dismissible para deslizar de Izquierda a derecha
+                  key:
+                      UniqueKey(), //CREA una llave unica que requiere el metodo
+                  background: Container(color: Colors.red),
+                  onDismissed: (direction) => DBProvider.db.deleteScan(scans[i]
+                      .id), //Cuando se deslice completamente llamamos al DBPRrovider
+                  child: ListTile(
+                    leading: Icon(Icons.cloud_queue,
+                        color: Theme.of(context).primaryColor),
+                    title: Text(scans[i].valor),
+                    subtitle: Text('ID: ${scans[i].id}'), //para ver el id
+                    trailing: Icon(Icons.keyboard_arrow_right,
+                        color: Colors.grey), // Indicar que se puede abrir
+                  ),
+                ));
       },
     );
   }
