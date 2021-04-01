@@ -8,6 +8,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter_qr_scanner/src/models/scan_model.dart';
+//Export para que podamos usar fuera, al llamar el provider y no tener que volver importar el model
+export 'package:flutter_qr_scanner/src/models/scan_model.dart';
 
 //clase patron singleton
 class DBProvider {
@@ -48,8 +50,7 @@ class DBProvider {
   //CREAR Registros (MODELO QUE NO USAREMOS, OTRA MANERA DE HACER)
   nuevoScanRaw(ScanModel nuevoScan) async {
     //Esperar a la base de dato
-    final db = await database;
-
+    final db  = await database;
     //Para insertar
     final res = await db.rawInsert(
         "INSERT Intro Scans (id, tipo, valor) " //Importante dejar este espacio al final
@@ -59,8 +60,7 @@ class DBProvider {
 
   //CREAR Registros (QUE USAREMOS) manera maás facil que la anterior
   nuevoScan(ScanModel nuevoScan) async {
-    final db = await database;
-
+    final db  = await database;
     //to Json.. transforma el modelo, lo definimos en el ScanModel
     final res = await db.insert('Scans', nuevoScan.toJson());
 
@@ -69,8 +69,7 @@ class DBProvider {
 
   //SELECT - Obtener información
   Future<ScanModel> getScanId(int id) async {
-    final db = await database;
-
+    final db  = await database;
     //retorna un mapa, pero deberia retornar un scan model
     final res = await db.query('Scans', where: 'id = ?', whereArgs: [
       id
@@ -82,7 +81,7 @@ class DBProvider {
 
   //Para traer Todos los Scans
   Future<List<ScanModel>> getAllScan() async {
-    final db = await database;
+    final db  = await database;
 
     //retorna un mapa, pero deberia retornar un scan model
     final res = await db.query('Scans');
@@ -96,7 +95,7 @@ class DBProvider {
   //para ver los tipos, si http o geolocation
   //Para traer Todos los Scans
   Future<List<ScanModel>> getScanForTypes(String tipo) async {
-    final db = await database;
+    final db  = await database;
     final res = await db.rawQuery("SELECT * FROM Scans WHERE tipo='$tipo'");
 
     //ScanModel.fromJson para retornar nueva instancia de ScanModel
@@ -107,8 +106,8 @@ class DBProvider {
 
   //Actualizar Registros, retorna un entero si actualiza
   Future<int> updateScan(ScanModel nuevoScan) async {
-    final db = await database;
-
+    
+    final db  = await database;
     final res = await db.update('Scans', nuevoScan.toJson(),
         where: 'id = ?',
         whereArgs: [nuevoScan.id]); //Sin ARGUMENTOS, Escanea todo
@@ -118,7 +117,7 @@ class DBProvider {
 
   //Borrar Registros
   Future<int> deleteScan(int id) async {
-    final db = await database;
+    final db  = await database;
     final res = await db.delete('Scans', where: 'id = ', whereArgs: [id]);
 
     return res;
@@ -126,7 +125,7 @@ class DBProvider {
 
   //Borrar Todos los  Registros
   Future<int> deleteAll(int id) async {
-    final db = await database;
+    final db  = await database;
     final res = await db.rawDelete('DELETE FROM Scans');  //lo mismo que delete('Scans');
 
     return res;

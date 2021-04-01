@@ -5,6 +5,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:flutter_qr_scanner/src/pages/directions_page.dart';
 import 'package:flutter_qr_scanner/src/pages/mapa_page.dart';
+import 'package:flutter_qr_scanner/src/providers/db_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -41,11 +42,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   _scanQR() async {
-    // https://fernando-herrera.com
+    //Tipos de datos:
+    // https://google.com
+    // geo:40.724233047051705,-74.00731459101564
+
+    String futureString = 'https://google.com';
     // geo:40.724233047051705,-74.00731459101564
 
     // String futureString = '';
-    String futureString = '';
+    // String futureString = '';
+
     try {
       // LECTOR QR;
       futureString = await BarcodeScanner.scan();
@@ -53,10 +59,13 @@ class _HomePageState extends State<HomePage> {
       futureString = e.toString();
     }
 
-    print('future String: $futureString');
+    // print('future String: $futureString');
 
     if (futureString != null) {
-      print("Leyendo Info");
+      // print("Leyendo Info");
+      //LLamando proceso de inserción
+      final scan = ScanModel(valor: futureString);
+      DBProvider.db.nuevoScan(scan);
     }
   }
 
@@ -75,9 +84,9 @@ class _HomePageState extends State<HomePage> {
   Widget _crearBottomNavigationBar() {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-       onTap: (index) {
+      onTap: (index) {
         setState(() {
-          currentIndex = index; 
+          currentIndex = index;
         });
       },
       items: [
@@ -87,5 +96,4 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-
 }
