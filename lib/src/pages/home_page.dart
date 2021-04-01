@@ -40,8 +40,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  
-
   _scanQR() async {
     // https://fernando-herrera.com
     // geo:40.724233047051705,-74.00731459101564
