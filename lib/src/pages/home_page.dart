@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'dart:io';
 
-import 'package:barcode_scan/barcode_scan.dart';
+// import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter_qr_scanner/src/bloc/scans_bloc.dart';
 import 'package:flutter_qr_scanner/src/models/scan_model.dart';
 
