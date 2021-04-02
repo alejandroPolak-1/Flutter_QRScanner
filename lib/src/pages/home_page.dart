@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 //import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter_qr_scanner/src/bloc/scans_bloc.dart';
+import 'package:flutter_qr_scanner/src/models/scan_model.dart';
 
 import 'package:flutter_qr_scanner/src/pages/directions_page.dart';
 import 'package:flutter_qr_scanner/src/pages/mapa_page.dart';
-import 'package:flutter_qr_scanner/src/providers/db_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final scansBloc = new ScansBloc();
+
   int currentIndex = 0;
 
   @override
@@ -23,11 +26,9 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
-            tooltip: 'Open shopping cart',
-            onPressed: () {
-              // handle the press
-            },
-          ),
+            tooltip: 'Delete',
+            onPressed: scansBloc.borrarScanAll, // handle the press
+            ),
         ],
       ),
       body: _callPage(currentIndex),
@@ -47,7 +48,6 @@ class _HomePageState extends State<HomePage> {
     // geo:40.724233047051705,-74.00731459101564
 
     String futureString = 'https://google.com';
-    // geo:40.724233047051705,-74.00731459101564
 
     // String futureString = '';
     // String futureString = '';
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
     try {
       // LECTOR QR;
       // futureString = await BarcodeScanner.scan(); /// PARA QUE LEA QR
-         futureString =  futureString;
+      futureString = futureString;
     } catch (e) {
       futureString = e.toString();
     }
@@ -66,7 +66,9 @@ class _HomePageState extends State<HomePage> {
       // print("Leyendo Info");
       //LLamando proceso de inserción
       final scan = ScanModel(valor: futureString);
-      DBProvider.db.nuevoScan(scan);
+      //DBProvider.db.nuevoScan(scan); //NO usar directamente DB provider, mejor con el scanBLoc
+
+      scansBloc.addScan(scan);
     }
   }
 
