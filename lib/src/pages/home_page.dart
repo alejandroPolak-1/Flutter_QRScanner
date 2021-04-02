@@ -8,7 +8,7 @@ import 'package:flutter_qr_scanner/src/bloc/scans_bloc.dart';
 import 'package:flutter_qr_scanner/src/models/scan_model.dart';
 
 import 'package:flutter_qr_scanner/src/pages/directions_page.dart';
-import 'package:flutter_qr_scanner/src/pages/mapa_page.dart';
+import 'package:flutter_qr_scanner/src/pages/mapas_page.dart';
 import 'package:flutter_qr_scanner/src/utils/scanUtils.dart' as utils;
 
 class HomePage extends StatefulWidget {
@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("QR Scanner"),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
@@ -39,13 +40,15 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.filter_center_focus),
-        onPressed: _scanQR,
+        onPressed: ()=>_scanQR(context),
         backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }
 
-  _scanQR() async {
+  _scanQR(BuildContext context) async {
+    //Funciona sin el Build context, pero para asegurarnos lo ponemos
+    
     //Tipos de datos:
     // https://google.com
     // geo:40.724233047051705,-74.00731459101564
@@ -71,18 +74,18 @@ class _HomePageState extends State<HomePage> {
       final scan = ScanModel(valor: futureString);
       scansBloc.addScan(scan);
 
-      // final scan2 =
-      //     ScanModel(valor: 'geo:40.724233047051705,-74.00731459101564');
-      // scansBloc.addScan(scan2);
-      //
+      final scan2 =
+          ScanModel(valor: 'geo:40.724233047051705,-74.00731459101564');
+      scansBloc.addScan(scan2);
+      
       ///[Importante para IOs]
       //info envia rapido y aun no se cierra el Lector QR.
       //hay que esperar 750 mils por es lo que se demora en cerrar la animación de lector QR
       //Platform es de Dart:io
       if (Platform.isIOS) {
-        Future.delayed(Duration(milliseconds: 750), () => utils.abrirScan(scan) );
+        Future.delayed(Duration(milliseconds: 750), () => utils.abrirScan(context, scan) );
       } else{
-          utils.abrirScan(scan);
+          utils.abrirScan(context, scan);
       }
 
     }
@@ -91,12 +94,12 @@ class _HomePageState extends State<HomePage> {
   _callPage(int actualPage) {
     switch (actualPage) {
       case 0:
-        return MapaPage();
+        return MapasPage();
       case 1:
         return DireccionesPage();
 
       default:
-        return MapaPage();
+        return MapasPage();
     }
   }
 
