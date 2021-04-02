@@ -124,7 +124,7 @@ class DBProvider {
   }
 
   //Borrar Todos los  Registros
-  Future<int> deleteAll(int id) async {
+  Future<int> deleteAll() async {
     final db  = await database;
     final res = await db.rawDelete('DELETE FROM Scans');  //lo mismo que delete('Scans');
 
