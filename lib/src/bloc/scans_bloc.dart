@@ -47,7 +47,10 @@ class ScansBloc {
   //Borrar scan
   borrarScan(int id) async {
     await DBProvider.db.deleteScan(id);
-    obtenerScans(); //leer los scans que quedorrarScanAll() async {
+    obtenerScans(); //leer los scans que quedan
+  }
+
+  borrarScanAll() async {
     DBProvider.db.deleteAll(); //purga toda la info
     //Dos maneras de ahcerlo
     //obtenerScans();  //otra manera

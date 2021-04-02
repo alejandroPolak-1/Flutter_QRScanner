@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 //import 'dart:io';
 
@@ -7,6 +9,7 @@ import 'package:flutter_qr_scanner/src/models/scan_model.dart';
 
 import 'package:flutter_qr_scanner/src/pages/directions_page.dart';
 import 'package:flutter_qr_scanner/src/pages/mapa_page.dart';
+import 'package:flutter_qr_scanner/src/utils/scanUtils.dart' as utils;
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,7 +31,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.delete_forever),
             tooltip: 'Delete',
             onPressed: scansBloc.borrarScanAll, // handle the press
-            ),
+          ),
         ],
       ),
       body: _callPage(currentIndex),
@@ -47,11 +50,9 @@ class _HomePageState extends State<HomePage> {
     // https://google.com
     // geo:40.724233047051705,-74.00731459101564
 
-    String futureString = 'https://google.com';
+    String futureString = 'https://fernando-herrera.com';
 
     // String futureString = '';
-    // String futureString = '';
-
     try {
       // LECTOR QR;
       // futureString = await BarcodeScanner.scan(); /// PARA QUE LEA QR
@@ -64,11 +65,26 @@ class _HomePageState extends State<HomePage> {
 
     if (futureString != null) {
       // print("Leyendo Info");
-      //LLamando proceso de inserción
-      final scan = ScanModel(valor: futureString);
-      //DBProvider.db.nuevoScan(scan); //NO usar directamente DB provider, mejor con el scanBLoc
 
+      //LLamando proceso de inserción
+      //final scan = DBProvider.db.nuevoScan(scan); //NO usar directamente DB provider, mejor con el scanBLoc
+      final scan = ScanModel(valor: futureString);
       scansBloc.addScan(scan);
+
+      // final scan2 =
+      //     ScanModel(valor: 'geo:40.724233047051705,-74.00731459101564');
+      // scansBloc.addScan(scan2);
+      //
+      ///[Importante para IOs]
+      //info envia rapido y aun no se cierra el Lector QR.
+      //hay que esperar 750 mils por es lo que se demora en cerrar la animación de lector QR
+      //Platform es de Dart:io
+      if (Platform.isIOS) {
+        Future.delayed(Duration(milliseconds: 750), () => utils.abrirScan(scan) );
+      } else{
+          utils.abrirScan(scan);
+      }
+
     }
   }
 
